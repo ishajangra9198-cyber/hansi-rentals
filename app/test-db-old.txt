@@ -1,0 +1,33 @@
+
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+
+export default function TestDatabase() {
+  const [status, setStatus] = useState("Checking connection...");
+
+  useEffect(() => {
+    async function testConnection() {
+      const { error } = await supabase
+        .from("properties")
+        .select("id")
+        .limit(1);
+
+      if (error) {
+        setStatus("Connection error: " + error.message);
+      } else {
+        setStatus("Connected successfully! Hansi Rentals is talking to Supabase.");
+      }
+    }
+
+    testConnection();
+  }, []);
+
+  return (
+    <main style={{ padding: 40, fontFamily: "Arial" }}>
+      <h1>Hansi Rentals Database Test</h1>
+      <p>{status}</p>
+    </main>
+  );
+}
